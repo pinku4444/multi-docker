@@ -11,17 +11,17 @@ script:
   - docker run -e CI=true pinkukumar/react-test npm test
 
 after_success:
-  - docker build -t pinkukumar/multi-client ./client
-  - docker build -t pinkukumar/multi-nginx ./nginx
-  - docker build -t pinkukumar/multi-server ./server
-  - docker build -t pinkukumar/multi-worker ./worker
+  - docker build -t pinkukumar/multi-client-10-14 ./client
+  - docker build -t pinkukumar/multi-nginx-10-14 ./nginx
+  - docker build -t pinkukumar/multi-server-10-14 ./server
+  - docker build -t pinkukumar/multi-worker-10-14 ./worker
   # Log in to the docker CLI
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
   # Take those images and push them to docker hub
-  - docker push pinkukumar/multi-client
-  - docker push pinkukumar/multi-nginx
-  - docker push pinkukumar/multi-server
-  - docker push pinkukumar/multi-worker
+  - docker push pinkukumar/multi-client-10-14
+  - docker push pinkukumar/multi-nginx-10-14
+  - docker push pinkukumar/multi-server-10-14
+  - docker push pinkukumar/multi-worker-10-14
 
 deploy:
   provider: elasticbeanstalk
@@ -29,7 +29,7 @@ deploy:
   app: 'multi-docker'
   env: 'Multidocker-env'
   bucket_name: 'elasticbeanstalk-ap-south-1-207638326760'
-  bucket_path: 'multi-docker'
+  bucket_path: 'docker-multi'
   on:
     branch: master
   access_key_id: $AWS_ACCESS_KEY
