@@ -5,10 +5,10 @@ services:
   - docker
 
 before_install:
-  - docker build -t stephengrider/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t pinkukumar/react-test -f ./client/Dockerfile.dev ./client
 
 script:
-  - docker run -e CI=true stephengrider/react-test npm test
+  - docker run -e CI=true pinkukumar/react-test npm test
 
 after_success:
   - docker build -t pinkukumar/multi-client ./client
@@ -22,3 +22,15 @@ after_success:
   - docker push pinkukumar/multi-nginx
   - docker push pinkukumar/multi-server
   - docker push pinkukumar/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: 'ap-south-1'
+  app: 'multi-docker'
+  env: 'Multidocker-env'
+  bucket_name: 'elasticbeanstalk-ap-south-1-207638326760'
+  bucket_path: 'multi-docker'
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key: $AWS_SECRET_KEY
